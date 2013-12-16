@@ -1,0 +1,37 @@
+html,body {
+  width:100%;
+}
+
+header {
+  background: #cccccc;
+  border: 2px solid #aaaaaa;
+}
+
+footer {
+  background: #cccccc;
+  height: 4em;
+  border: 2px solid #aaaaaa;
+}
+
+.wrapper {
+  width:960px;
+  background: #eeeeee;
+  margin: 0 auto 0 auto;
+  padding: 1em;
+  border: 2px solid #aaaaaa;
+}
+
+.packageItem {
+  padding-top:1em;
+  border: 1px solid #cccccc;
+
+  label {
+    display:block;
+  }
+}
+
+.newPackage {
+  padding-top:1em;
+  border: 1px solid #cccccc;
+}
+
