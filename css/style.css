@@ -23,7 +23,7 @@ footer {
 /* line 20, ../sass/style.scss */
 .wrapper {
   width: 960px;
-  background: #eeeeee;
+  background: #efefef;
   margin: 0 auto 0 auto;
   padding: 1em;
   border: 2px solid #aaaaaa;
@@ -40,11 +40,24 @@ footer {
 }
 
 /* line 37, ../sass/style.scss */
-small.success {
-  color: green;
+small.PROCESSING {
+  font-weight: bold;
+  color: red;
 }
 
-/* line 40, ../sass/style.scss */
+/* line 42, ../sass/style.scss */
+small.SHIPPING {
+  font-weight: bold;
+  color: orange;
+}
+
+/* line 47, ../sass/style.scss */
+small.ARRIVED {
+  font-weight: bold;
+  color: limegreen;
+}
+
+/* line 51, ../sass/style.scss */
 .newPackage {
   padding-top: 1em;
   border: 1px solid #cccccc;

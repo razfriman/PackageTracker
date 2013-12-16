@@ -103,7 +103,7 @@
         </div>
         <div class="row">
             <div class="small-6 columns">
-                <h5>Status <small ng-class="success">{{package.status}}</small></h5>
+                <h5>Status <small class="{{package.status}}">{{package.status}}</small></h5>
             </div>
         </div>
         <div class="row">

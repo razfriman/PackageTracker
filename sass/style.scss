@@ -19,7 +19,7 @@ footer {
 
 .wrapper {
   width:960px;
-  background: #eeeeee;
+  background: #efefef;
   margin: 0 auto 0 auto;
   padding: 1em;
   border: 2px solid #aaaaaa;
@@ -34,8 +34,19 @@ footer {
   }
 }
 
-small.success {
-  color: green;
+small.PROCESSING {
+  font-weight: bold;
+  color:red;
+}
+
+small.SHIPPING {
+  font-weight: bold;
+  color:orange;
+}
+
+small.ARRIVED {
+  font-weight: bold;
+  color:limegreen;
 }
 .newPackage {
   padding-top:1em;
