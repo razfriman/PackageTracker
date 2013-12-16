@@ -1,2 +1,6 @@
 api/vendor
 bower_components
+.idea
+.sass-cache
+api/composer.lock
+
