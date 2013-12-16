@@ -22,7 +22,7 @@ function PackageCtrl($scope) {
                 order_date: '2013-01-05',
                 link: 'http://www.google.com',
                 price: 41.50,
-                isEditing: true
+                isEditing: false
             },
             {
                 name:'Blue Hat',

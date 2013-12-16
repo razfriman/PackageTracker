@@ -8,15 +8,19 @@ header {
   background: #cccccc;
   border: 2px solid #aaaaaa;
 }
+/* line 9, ../sass/style.scss */
+header h1 {
+  margin-left: 1em;
+}
 
-/* line 10, ../sass/style.scss */
+/* line 14, ../sass/style.scss */
 footer {
   background: #cccccc;
   height: 4em;
   border: 2px solid #aaaaaa;
 }
 
-/* line 16, ../sass/style.scss */
+/* line 20, ../sass/style.scss */
 .wrapper {
   width: 960px;
   background: #eeeeee;
@@ -25,17 +29,22 @@ footer {
   border: 2px solid #aaaaaa;
 }
 
-/* line 24, ../sass/style.scss */
+/* line 28, ../sass/style.scss */
 .packageItem {
   padding-top: 1em;
   border: 1px solid #cccccc;
 }
-/* line 28, ../sass/style.scss */
+/* line 32, ../sass/style.scss */
 .packageItem label {
   display: block;
 }
 
-/* line 33, ../sass/style.scss */
+/* line 37, ../sass/style.scss */
+small.success {
+  color: green;
+}
+
+/* line 40, ../sass/style.scss */
 .newPackage {
   padding-top: 1em;
   border: 1px solid #cccccc;

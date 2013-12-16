@@ -5,6 +5,10 @@ html,body {
 header {
   background: #cccccc;
   border: 2px solid #aaaaaa;
+
+  h1 {
+    margin-left:1em;
+  }
 }
 
 footer {
@@ -30,6 +34,9 @@ footer {
   }
 }
 
+small.success {
+  color: green;
+}
 .newPackage {
   padding-top:1em;
   border: 1px solid #cccccc;
