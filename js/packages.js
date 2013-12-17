@@ -22,22 +22,22 @@ function PackageCtrl($scope,$http) {
 
         $scope.packagesLoaded = true;
 
-        data.forEach(function(package) {
-            package.isEditing = false;
+        data.forEach(function(pPackage) {
+            pPackage.isEditing = false;
 
-            if(package.order_date != null) {
-                package.order_date = moment(package.order_date).format('YYYY-MM-DD');
+            if(pPackage.order_date != null) {
+                pPackage.order_date = moment(pPackage.order_date).format('YYYY-MM-DD');
             }
 
-            if (package.estimated_arrival_date != null) {
-                package.estimated_arrival_date = moment(package.estimated_arrival_date).format('YYYY-MM-DD');
+            if (pPackage.estimated_arrival_date != null) {
+                pPackage.estimated_arrival_date = moment(pPackage.estimated_arrival_date).format('YYYY-MM-DD');
             }
 
-            if (package.price != null) {
-                package.price = parseFloat(package.price);
+            if (pPackage.price != null) {
+                pPackage.price = parseFloat(pPackage.price);
             }
 
-            $scope.packages.push(package);
+            $scope.packages.push(pPackage);
         });
     });
 
@@ -45,10 +45,10 @@ function PackageCtrl($scope,$http) {
 
     $scope.removePackage = function(index) {
 
-        var package = $scope.packages[index];
+        var pPackage = $scope.packages[index];
 
         $http({
-            url: 'api/index.php/packages/' + package['id'],
+            url: 'api/index.php/packages/' + pPackage['id'],
             method: 'DELETE'
         }).success(function () {
                 $scope.packages.splice(index, 1);
@@ -72,35 +72,35 @@ function PackageCtrl($scope,$http) {
     };
 
     $scope.markAsArrived = function(index) {
-        var package = $scope.packages[index];
-        package.status = 'ARRIVED';
+        var pPackage = $scope.packages[index];
+        pPackage.status = 'ARRIVED';
 
-        $scope.updatePackage(package);
+        $scope.updatePackage(pPackage);
     };
 
-    $scope.updatePackage = function(package) {
+    $scope.updatePackage = function(pPackage) {
 
         $http({
-            url: 'api/index.php/packages/' + package.id,
+            url: 'api/index.php/packages/' + pPackage.id,
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            data: package
+            data: pPackage
         }).success(function () {
 
             });
-    }
+    };
 
 
     $scope.editPackage = function(index) {
-        var package = $scope.packages[index];
-        package.isEditing = true;
+        var pPackage = $scope.packages[index];
+        pPackage.isEditing = true;
     };
 
     $scope.savePackage = function(index) {
-        var package = $scope.packages[index];
-        package.isEditing = false;
+        var pPackage = $scope.packages[index];
+        pPackage.isEditing = false;
 
-        $scope.updatePackage(package);
+        $scope.updatePackage(pPackage);
     };
 
     $scope.addPackage = function() {
@@ -130,9 +130,9 @@ function PackageCtrl($scope,$http) {
     };
 
     $scope.numberOfDays = function(index) {
-        var package = $scope.packages[index];
-        var startDate = moment(package.order_date);
-        var endDate = moment(package.estimated_arrival_date);
+        var pPackage = $scope.packages[index];
+        var startDate = moment(pPackage.order_date);
+        var endDate = moment(pPackage.estimated_arrival_date);
 
         return moment.duration(endDate.diff(startDate)).asDays();
     };
