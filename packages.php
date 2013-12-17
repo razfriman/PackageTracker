@@ -24,6 +24,15 @@
     <a href="#" class="close">&times;</a>
 </div>
 
+<div id="myModal" class="reveal-modal small" data-reveal>
+    <h4>Are you sure you want to remove this package?</h4>
+    <form name="confirmDeleteForm" ng-submit="closeDialog(true)">
+        <button class="alert" type="submit">Confirm</button>
+        <button type="button" ng-click="closeDialog(false)">Cancel</button>
+    </form>
+    <a class="close-reveal-modal">&#215;</a>
+</div>
+
 <div class="packageItem" ng-repeat="package in packages">
 
     <div ng-if="package.isEditing">
@@ -88,11 +97,10 @@
                     <small ng-show="packageForm.price.$dirty && packageForm.price.$invalid">Invalid Price</small>
                 </div>
             </div>
-
             <div class="row">
                 <div class="small-6 columns">
                     <button class="" type="submit" ng-disabled="packageForm.$invalid" ng-click="savePackage($index)">Save Changes</button>
-                    <button class="alert" type="reset" ng-click="removePackage($index)">Remove</button>
+                    <button class="alert" type="button" ng-click="requestRemovePackage($index)">Remove</button>
                 </div>
             </div>
         </form>
@@ -146,7 +154,7 @@
             <div class="small-6 columns">
                 <button class="" ng-click="editPackage($index)">Edit</button>
                 <button class="success" ng-click="markAsArrived($index)" ng-show="package.status !== 'ARRIVED'">Mark as Arrived</button>
-                <button class="alert" ng-click="removePackage($index)">Remove</button>
+                <button class="alert" ng-click="requestRemovePackage($index)">Remove</button>
             </div>
         </div>
     </div>
@@ -236,6 +244,7 @@
 
 <script src="bower_components/foundation/js/vendor/jquery.js" type="application/javascript"></script>
 <script src="bower_components/foundation/js/foundation.min.js" type="application/javascript"></script>
+<script src="bower_components/foundation/js/foundation/foundation.reveal.js" type="application/javascript"></script>
 <script>
     $(document).foundation();
 </script>

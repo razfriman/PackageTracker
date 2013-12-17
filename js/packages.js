@@ -15,6 +15,8 @@ function PackageCtrl($scope,$http) {
         isEditing: false
     };
 
+    $scope.selectedIndex = -1;
+
     $scope.packages = [];
 
 
@@ -42,6 +44,13 @@ function PackageCtrl($scope,$http) {
     });
 
 
+
+    $scope.requestRemovePackage = function(index) {
+        $scope.selectedIndex = index;
+
+        $('#myModal').foundation('reveal', 'open', 'http://some-url');
+
+    };
 
     $scope.removePackage = function(index) {
 
@@ -127,6 +136,14 @@ function PackageCtrl($scope,$http) {
                 $scope.packages.push($scope.package);
                 $scope.resetPackage();
             });
+    };
+
+    $scope.closeDialog = function(confirm) {
+        $('#myModal').foundation('reveal', 'close');
+
+        if(confirm) {
+            $scope.removePackage($scope.selectedIndex);
+        }
     };
 
     $scope.numberOfDays = function(index) {
