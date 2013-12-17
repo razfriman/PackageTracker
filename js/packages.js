@@ -20,9 +20,53 @@ function PackageCtrl($scope,$http) {
     $scope.packages = [];
 
 
+    $scope.verifyTrackingNumber = function(tracking_number) {
+
+        var isValid = $scope.isFedex(tracking_number);
+        return isValid;
+    };
+
+    $scope.isFedex = function(tracking_number) {
+        return $scope.isFedexGround(tracking_number) || $scope.isFedexExpress(tracking_number);
+    };
+
+    $scope.isFedexGround = function(tracking_number) {
+        return false;
+    };
+
+    $scope.isFedexExpress = function(tracking_number) {
+
+        if (tracking_number.length != 12 || !(/^\d+$/).test(tracking_number)) {
+            return false;
+        }
+
+        var checkDigits = [1,3,7];
+        var numCheckDigits = 3;
+
+        var sum = 0;
+
+        for (var i=10; i>=0; i--) {
+            sum += (checkDigits[(10 - i) % numCheckDigits] * tracking_number[i]);
+        }
+        var remainder = ((sum % 11) % 10);
+
+        return (remainder == tracking_number[11]);
+    };
+
     $http.get('api/index.php/packages').success(function(data) {
 
         $scope.packagesLoaded = true;
+
+        /*
+        UPS
+         UPS Tracking Numbers appear in the following formats:
+         1Z 999 999 99 9999 999 9
+         9999 9999 999
+         T999 9999 999
+         */
+        console.log("IS FEDEX: " + $scope.isFedex("111111111111"));
+        console.log("IS FEDEX: " + $scope.isFedex("123456789012"));
+        console.log('https://www.fedex.com/fedextrack/?tracknumbers=111111111111');
 
         data.forEach(function(pPackage) {
             pPackage.isEditing = false;
