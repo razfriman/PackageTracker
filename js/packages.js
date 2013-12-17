@@ -44,7 +44,16 @@ function PackageCtrl($scope,$http) {
 
 
     $scope.removePackage = function(index) {
-        $scope.packages.splice(index, 1);
+
+        var package = $scope.packages[index];
+
+        $http({
+            url: 'api/index.php/packages/' + package['id'],
+            method: 'DELETE'
+        }).success(function () {
+                $scope.packages.splice(index, 1);
+            });
+
     };
 
     $scope.resetPackage = function() {
@@ -65,7 +74,22 @@ function PackageCtrl($scope,$http) {
     $scope.markAsArrived = function(index) {
         var package = $scope.packages[index];
         package.status = 'ARRIVED';
+
+        $scope.updatePackage(package);
     };
+
+    $scope.updatePackage = function(package) {
+
+        $http({
+            url: 'api/index.php/packages/' + package.id,
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            data: package
+        }).success(function () {
+
+            });
+    }
+
 
     $scope.editPackage = function(index) {
         var package = $scope.packages[index];
@@ -75,10 +99,12 @@ function PackageCtrl($scope,$http) {
     $scope.savePackage = function(index) {
         var package = $scope.packages[index];
         package.isEditing = false;
+
+        $scope.updatePackage(package);
     };
 
     $scope.addPackage = function() {
-        $scope.packages.push($scope.package);
+
 
         if ($scope.package.estimated_arrival_date == '') {
             $scope.package.estimated_arrival_date = null;
@@ -88,13 +114,9 @@ function PackageCtrl($scope,$http) {
             $scope.package.order_date = null;
         }
 
-        console.log($scope.package.price);
-
         if ($scope.package.price == '') {
             $scope.package.price = null;
         }
-
-        console.log($scope.package);
 
         $http({
             url: 'api/index.php/packages',
@@ -102,10 +124,9 @@ function PackageCtrl($scope,$http) {
             headers: { 'Content-Type': 'application/json' },
             data: $scope.package
         }).success(function () {
-                console.log('success');
+                $scope.packages.push($scope.package);
+                $scope.resetPackage();
             });
-
-        $scope.resetPackage();
     };
 
     $scope.numberOfDays = function(index) {

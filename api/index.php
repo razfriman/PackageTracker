@@ -127,5 +127,89 @@ $app->post(
     }
 );
 
+$app->put(
+    '/packages/:id',
+    function ($id) use ($app, $db) {
+
+        $request = $app->request()->getBody();
+
+        // Load the request properties
+        $product_name = $request['product_name'];
+        $status = $request['status'];
+        $tracking_number = $request['tracking_number'];
+        $estimated_arrival_date = $request['estimated_arrival_date'];
+        $order_date = $request['order_date'];
+        $link = $request['link'];
+        $price = $request['price'];
+
+        $success = false;
+        $reason = '';
+
+        try {
+
+            // INSERT THE ANSWER
+            $sth = $db->prepare('UPDATE packages SET product_name=:product_name, status=:status, tracking_number=:tracking_number, estimated_arrival_date=:estimated_arrival_date, order_date=:order_date,link=:link,price=:price WHERE id=:id');
+            $sth->bindParam(':id', $id);
+            $sth->bindParam(':product_name', $product_name);
+            $sth->bindParam(':status', $status);
+            $sth->bindParam(':tracking_number', $tracking_number);
+            $sth->bindParam(':estimated_arrival_date', $estimated_arrival_date);
+            $sth->bindParam(':order_date', $order_date);
+            $sth->bindParam(':link', $link);
+            $sth->bindParam(':price', $price);
+            $sth->execute();
+
+            $success = true;
+
+        } catch(PDOException $e) {
+            $success = false;
+            $reason = $e->getMessage();
+        }
+
+        // Create the response data
+        $dataArray = array(
+            'success' => $success,
+            'reason' => $reason);
+
+        // Send the JSON response data
+        $response = $app->response();
+        $response['Content-Type'] = 'application/json';
+        $response->status(200);
+        $response->write(json_encode($dataArray));
+    }
+);
+
+$app->delete(
+    '/packages/:id',
+    function ($id) use ($app, $db) {
+
+        $success = false;
+        $reason = '';
+
+        try {
+
+            $sth = $db->prepare('DELETE FROM packages WHERE id=:id');
+            $sth->bindParam(':id',$id);
+            $sth->execute();
+
+            $success = true;
+
+        } catch(PDOException $e) {
+            $success = false;
+            $reason = $e->getMessage();
+        }
+
+        $dataArray = array(
+            'success' => $success,
+            'reason' => $reason);
+
+        // Return the JSON Data
+        $response = $app->response();
+        $response['Content-Type'] = 'application/json';
+        $response->status(200);
+        $response->write(json_encode($dataArray));
+    }
+);
+
 // Run the Slim app as specified by the Slim Framework documentation
 $app->run();
