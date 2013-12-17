@@ -5,11 +5,10 @@
     <link rel="stylesheet" href="bower_components/foundation/css/normalize.css">
     <link rel="stylesheet" href="bower_components/foundation/css/foundation.css">
     <link rel="stylesheet" href="css/style.css" >
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
-    <script src="js/packages.js" type="application/javascript"></script>
     <script src="bower_components/moment/min/moment.min.js" type="application/javascript"></script>
 
-
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+    <script src="js/packages.js" type="application/javascript"></script>
 </head>
 <body>
 <header>
@@ -20,17 +19,22 @@
 <h1>View your Packages</h1>
 
 
+<div data-alert class="info alert-box" ng-show="packages.length == 0 && packagesLoaded">
+    <h6>Add a new package to get started.</h6>
+    <a href="#" class="close">&times;</a>
+</div>
+
 <div class="packageItem" ng-repeat="package in packages">
 
     <div ng-if="package.isEditing">
 
-        <form name="packageForm">
+        <form name="packageForm" ng-submit="savePackage($index)">
 
             <div class="row">
-                <div class="small-6 columns" ng-class="{error: packageForm.name.$dirty && packageForm.name.$invalid}">
+                <div class="small-6 columns" ng-class="{error: packageForm.product_name.$dirty && packageForm.product_name.$invalid}">
                     <label for="name">Product Name <small>Required</small></label>
-                    <input type="text" placeholder="Product Name" ng-model="package.name" id="name" name="name" required />
-                    <small ng-show="packageForm.name.$dirty && packageForm.name.$invalid">Product name is required</small>
+                    <input type="text" placeholder="Product Name" ng-model="package.product_name" id="product_name" name="product_name" required />
+                    <small ng-show="packageForm.product_name.$dirty && packageForm.product_name.$invalid">Product name is required</small>
                 </div>
             </div>
 
@@ -87,8 +91,8 @@
 
             <div class="row">
                 <div class="small-6 columns">
-                    <button class="" ng-disabled="packageForm.$invalid" ng-click="savePackage($index)">Save Changes</button>
-                    <button class="alert" ng-click="removePackage($index)">Remove</button>
+                    <button class="" type="submit" ng-disabled="packageForm.$invalid" ng-click="savePackage($index)">Save Changes</button>
+                    <button class="alert" type="reset" ng-click="removePackage($index)">Remove</button>
                 </div>
             </div>
         </form>
@@ -98,7 +102,7 @@
 
         <div class="row">
             <div class="small-6 columns">
-                <h5>Product Name <small>{{package.name}}</small></h5>
+                <h5>Product Name <small>{{package.product_name}}</small></h5>
             </div>
         </div>
         <div class="row">
@@ -134,7 +138,7 @@
 
         <div class="row">
             <div class="small-6 columns">
-                <h5>Product Price <small>${{package.price}}</small></h5>
+                <h5>Product Price <small>${{package.price.toFixed(2)}}</small></h5>
             </div>
         </div>
 
@@ -150,13 +154,13 @@
 
 <h2>Add a New Package</h2>
 <div class="newPackage">
-    <form name="packageForm">
+    <form name="packageForm" ng-submit="addPackage()">
 
         <div class="row">
-            <div class="small-6 columns" ng-class="{error: packageForm.name.$invalid}">
+            <div class="small-6 columns" ng-class="{error: packageForm.product_name.$invalid}">
                 <label for="name">Product Name <small>Required</small></label>
-                <input type="text" placeholder="Product Name" ng-model="package.name" id="name" name="name" required />
-                <small ng-show="packageForm.name.$invalid">Product name is required</small>
+                <input type="text" placeholder="Product Name" ng-model="package.product_name" id="product_name" name="product_name" required />
+                <small ng-show="packageForm.product_name.$invalid">Product name is required</small>
             </div>
         </div>
 
@@ -206,15 +210,15 @@
         <div class="row">
             <div class="small-2 columns" ng-class="{error: packageForm.price.$invalid}">
                 <label for="price">Product Price</label>
-                <input type="number" placeholder="Price" ng-model="package.price" name="price" id="price" />
+                <input type="number" placeholder="Price" ng-model="package.price" step=".01" name="price" id="price" />
                 <small ng-show="packageForm.price.$invalid">Invalid Price</small>
             </div>
         </div>
 
         <div class="row">
             <div class="small-6 columns">
-                <button class="" ng-disabled="packageForm.$invalid" ng-click="addPackage()">Add Package</button>
-                <button class="alert" ng-click="resetPackage()">Reset</button>
+                <button class="" type="submit" ng-disabled="packageForm.$invalid">Add Package</button>
+                <button class="alert" type="reset" ng-click="resetPackage()">Reset</button>
             </div>
         </div>
     </form>
@@ -229,5 +233,11 @@
 <a href="api/index.php">TEST API</a>
 </div>
 <footer></footer>
+
+<script src="bower_components/foundation/js/vendor/jquery.js" type="application/javascript"></script>
+<script src="bower_components/foundation/js/foundation.min.js" type="application/javascript"></script>
+<script>
+    $(document).foundation();
+</script>
 </body>
 </html>

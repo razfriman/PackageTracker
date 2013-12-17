@@ -44,25 +44,17 @@ $app->get(
     }
 );
 
-// GET LIST OF ALL USERS
 $app->get(
-    '/users',
+    '/packages',
     function () use ($app, $db) {
 
-        // Create a return array for the user data
-        $userData = array();
+        $packageData = array();
 
         try {
 
-            // Get the information for all users from the database
-            $sth = $db->prepare('SELECT * FROM users');
+            $sth = $db->prepare('SELECT * FROM packages');
             $sth->execute();
-            $userData = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-            // Remove password from returned data
-            foreach ($userData as &$user) {
-                unset($user['password']);
-            }
+            $packageData = $sth->fetchAll(PDO::FETCH_ASSOC);
 
         } catch(PDOException $e) {
             // SQL ERROR
@@ -72,10 +64,68 @@ $app->get(
         $response = $app->response();
         $response['Content-Type'] = 'application/json';
         $response->status(200);
-        $response->write(json_encode($userData));
+        $response->write(json_encode($packageData));
     }
 );
 
+$app->post(
+    '/packages',
+    function () use ($app, $db) {
+
+        $request = $app->request()->getBody();
+
+        // Load the request properties
+        $product_name = $request['product_name'];
+        $status = $request['status'];
+        $tracking_number = $request['tracking_number'];
+        $estimated_arrival_date = $request['estimated_arrival_date'];
+        $order_date = $request['order_date'];
+        $link = $request['link'];
+        $price = $request['price'];
+
+        $success = false;
+        $reason = '';
+        $insert_id = -1;
+
+        try {
+
+            // INSERT THE ANSWER
+            $sth = $db->prepare('INSERT INTO packages (product_name,status,tracking_number,estimated_arrival_date,order_date,link,price)
+					VALUES (:product_name,:status,:tracking_number,:estimated_arrival_date,:order_date,:link,:price)');
+
+            $sth->bindParam(':product_name', $product_name);
+            $sth->bindParam(':status', $status);
+            $sth->bindParam(':tracking_number', $tracking_number);
+            $sth->bindParam(':estimated_arrival_date', $estimated_arrival_date);
+            $sth->bindParam(':order_date', $order_date);
+            $sth->bindParam(':link', $link);
+            $sth->bindParam(':price', $price);
+            $sth->execute();
+
+            // Get the new id
+            $insert_id = $db->lastInsertId();
+
+            $success = true;
+
+        } catch(PDOException $e) {
+            $success = false;
+            $reason = $e->getMessage();
+            //$reason = 'Error: could not add package';
+        }
+
+        // Create the response data
+        $dataArray = array(
+            'success' => $success,
+            'reason' => $reason,
+            'insert_id' => $insert_id);
+
+        // Send the JSON response data
+        $response = $app->response();
+        $response['Content-Type'] = 'application/json';
+        $response->status(200);
+        $response->write(json_encode($dataArray));
+    }
+);
 
 // Run the Slim app as specified by the Slim Framework documentation
 $app->run();

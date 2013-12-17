@@ -1,40 +1,47 @@
 
-function PackageCtrl($scope) {
+function PackageCtrl($scope,$http) {
+
+    $scope.packagesLoaded = false;
 
     $scope.package =
-            {
-                name:'',
-                status: 'PROCESSING',
-                tracking_number: '',
-                estimated_arrival_date: '',
-                order_date: '',
-                link: '',
-                price: '',
-                isEditing: false
-            };
-    $scope.packages =
-        [
-            {
-                name:'Pink Scarf',
-                status: 'SHIPPING',
-                tracking_number: '00180925010211',
-                estimated_arrival_date: '2013-01-11',
-                order_date: '2013-01-05',
-                link: 'http://www.google.com',
-                price: 41.50,
-                isEditing: false
-            },
-            {
-                name:'Blue Hat',
-                status: 'PROCESSING',
-                tracking_number: '009124999934',
-                estimated_arrival_date: '2013-01-08',
-                order_date: '2013-01-02',
-                link: 'http://www.google.com',
-                price: 9.99,
-                isEditing: false
+    {
+        product_name:'',
+        status: 'PROCESSING',
+        tracking_number: '',
+        estimated_arrival_date: '',
+        order_date: moment().format('YYYY-MM-DD'),
+        link: '',
+        price: '',
+        isEditing: false
+    };
+
+    $scope.packages = [];
+
+
+    $http.get('api/index.php/packages').success(function(data) {
+
+        $scope.packagesLoaded = true;
+
+        data.forEach(function(package) {
+            package.isEditing = false;
+
+            if(package.order_date != null) {
+                package.order_date = moment(package.order_date).format('YYYY-MM-DD');
             }
-        ];
+
+            if (package.estimated_arrival_date != null) {
+                package.estimated_arrival_date = moment(package.estimated_arrival_date).format('YYYY-MM-DD');
+            }
+
+            if (package.price != null) {
+                package.price = parseFloat(package.price);
+            }
+
+            $scope.packages.push(package);
+        });
+    });
+
+
 
     $scope.removePackage = function(index) {
         $scope.packages.splice(index, 1);
@@ -72,6 +79,32 @@ function PackageCtrl($scope) {
 
     $scope.addPackage = function() {
         $scope.packages.push($scope.package);
+
+        if ($scope.package.estimated_arrival_date == '') {
+            $scope.package.estimated_arrival_date = null;
+        }
+
+        if ($scope.package.order_date == '') {
+            $scope.package.order_date = null;
+        }
+
+        console.log($scope.package.price);
+
+        if ($scope.package.price == '') {
+            $scope.package.price = null;
+        }
+
+        console.log($scope.package);
+
+        $http({
+            url: 'api/index.php/packages',
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: $scope.package
+        }).success(function () {
+                console.log('success');
+            });
+
         $scope.resetPackage();
     };
 
